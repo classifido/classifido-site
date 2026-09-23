@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to add a class link &middot; Classifido</title>
+<meta name="description" content="A three-minute walkthrough of adding a class link in Classifido.">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<div class="page">
+<!-- **The heading and the video, and deliberately nothing else.** No
+     introduction, no summary of the steps, no "any questions" line: the
+     modal that links here already carries the six steps in Bradley's words,
+     and a second telling on this page would be a second thing to keep in
+     step with them. The heading is his, exactly. -->
+<main class="doc is-wide">
+<h1>How to add a class link</h1>
+<!-- **`playsinline` so an iPhone plays it in the page** rather than taking
+     over the screen, which is the one behaviour that differs by platform and
+     is not worth a sentence explaining.
+
+     **`preload="metadata"` and not `auto`.** The file is 9.5MB; `auto` pulls
+     all of it the moment the page opens, for a visitor who may not press
+     play. Metadata is enough to draw the timeline and the poster frame.
+
+     **No fallback text inside the element.** Everything a family reads here
+     is Bradley's approved copy, and there are exactly two strings of it: the
+     title and the heading. -->
+<video class="help-video" controls playsinline preload="metadata"
+       width="1920" height="1080">
+<source src="/help/class-link/how-to-add-a-class-link.mp4" type="video/mp4">
+</video>
+</main>
+</div>
+</body>
+</html>

@@ -177,6 +177,37 @@ body { --section: 27px; --prose: 18px; }
   overflow-wrap: break-word;
 }
 
+/* **A page whose subject is a picture, not a paragraph.** `.doc`'s 58ch is a
+   READING measure and it is right for nine pages of prose; a 1920x1080 screen
+   recording of a browser inside it is 520px wide, which is smaller than the
+   window being demonstrated and leaves the thing the video is pointing at
+   unreadable. So the column opens up for this one page and the type scale,
+   the ink and the rhythm are untouched -- the heading above the video sits
+   where every other heading on the site sits.
+
+   **A ceiling and not a full-bleed.** 900px is about half a 1080p frame and
+   is where a screen recording stops gaining legibility; past it the video
+   grows and the page starts to read as an application rather than a page. */
+.doc.is-wide { max-width: 900px; }
+
+/* **The video fills whatever column it is given and keeps its own shape.**
+   `width: 100%` with `height: auto` overrides the intrinsic `width`/`height`
+   attributes on the element -- those are there so the browser reserves the
+   right box before the file arrives and the heading does not jump when it
+   does.
+
+   **A black ground, because the letterbox is part of the control.** The
+   first frame has not arrived while the metadata loads, and the page's warm
+   ground showing through a video-shaped hole reads as a broken image. */
+.help-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 28px;
+  background: #000;
+  border-radius: 10px;
+}
+
 .doc h1 {
   margin: 0;
   font-weight: 600;

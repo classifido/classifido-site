@@ -92,5 +92,13 @@ lines under a mark are a lockup; nine pages of centred prose are unreadable.
 ## DNS
 
 The apex is four `A` records at Porkbun pointing at GitHub Pages
-(185.199.108–111.153), with `www` a `CNAME` to `bradley-duitlabs.github.io`.
+(185.199.108–111.153), with `www` a `CNAME` to `classifido.github.io`.
 `CNAME` in this repo is what binds the domain to the site.
+
+The four apex addresses are GitHub's own and are the same whoever owns the
+repository, so they did not move when this repository went from
+`bradley-duitlabs` to the `classifido` organisation. The `www` record did:
+a `CNAME` names the OWNER's Pages host, so it is `classifido.github.io`
+now. The custom domain and its certificate survived the transfer intact --
+`classifido.com` and `www.classifido.com` are both on the certificate and
+HTTPS is still enforced -- so nothing here had to be re-entered.

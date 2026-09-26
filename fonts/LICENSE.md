@@ -1,4 +1,21 @@
+Two typefaces ship in this directory, and both are under the SIL Open Font
+License, Version 1.1. The licence text below is one copy because the two are
+word for word the same -- checked against each project's own OFL.txt rather
+than assumed. Each font's own copyright notice, which the licence requires
+travel with it, is reproduced here in full.
+
+**Source Sans 3** -- `SourceSans3-Regular.ttf.woff2`, `SourceSans3-Semibold.ttf.woff2`
+
 Copyright 2010-2024 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'. All Rights Reserved. Source is a trademark of Adobe in the United States and/or other countries.
+
+**Caveat** -- `Caveat-SemiBold.woff2`
+
+Copyright 2014 The Caveat Project Authors (https://github.com/googlefonts/caveat)
+
+The Caveat file is the Latin subset Google Fonts serves for weight 600, saved
+as a file this site serves itself. The homepage's three hand-written notes are
+the only text set in it, and nothing on this site fetches a font from anywhere
+but this directory.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 

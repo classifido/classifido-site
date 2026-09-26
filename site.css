@@ -10,10 +10,16 @@
  * three copies of one answer is three answers waiting to drift, so they are
  * here once now. Re-copying from render.py means editing THIS file.
  *
- * What is NOT here: the lockup. `.frame` / `.watermark` / `.mark` / `.type`
- * / `.wordmark` / `.i` / `.cap` / `.fido` and the three cap size rules stay
- * inline in `index.html`, because they are a rendered artifact of one
- * function and only that page has an element for any of them.
+ * What is NOT here: the name treatment. `.wordmark` / `.i` / `.cap` /
+ * `.fido` and the three cap size rules stay inline in `index.html`, because
+ * they are a rendered artifact of one function -- `render.sign_in_page()` --
+ * and re-copying them means replacing that block, not editing this file.
+ *
+ * `.mark` and `.watermark` USED to be named in this sentence and are not any
+ * more: they are the size and the position of an image, which is layout, and
+ * the homepage now places both in two places each. They live below with the
+ * rest of the homepage. The image data itself is untouched and there is still
+ * exactly one drawing of the dog and one of the faded dog.
  * ---------------------------------------------------------------------- */
 
 @font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 400;
@@ -22,6 +28,14 @@
 @font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 600;
              font-display: swap;
              src: url("/fonts/SourceSans3-Semibold.ttf.woff2") format("woff2"); }
+/* The hand-written face, and the ONLY thing set in it is the homepage's three
+   notes. Self-hosted like the other two: the mockup pulled this from Google
+   Fonts and the privacy policy promises no third-party request of any kind, so
+   the file sits in `/fonts` with its OFL notice in `fonts/LICENSE.md`. Weight
+   600 only -- there is no other weight of it on this site to want. */
+@font-face { font-family: "Caveat"; font-style: normal; font-weight: 600;
+             font-display: swap;
+             src: url("/fonts/Caveat-SemiBold.woff2") format("woff2"); }
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -35,29 +49,16 @@ body {
   background: #faf8f4;
   color: #17191b;
   font-family: "Source Sans 3", system-ui, sans-serif;
-  --pad-top: 67px;
   --col-pad: 80px;
-  --col-max: 620px;
-  --col-gap: 40px;
-  --mark: 128px;
   --wordmark: 46px;
-  --tagline: 21px;
   --small: 16px;
-  --action: 364px;
-  --watermark: 500px;
 }
 @media (max-width: 1014px) {
-  body {
-    --pad-top: 273px; --col-pad: 64px; --col-max: 560px; --col-gap: 36px;
-    --mark: 116px; --wordmark: 42px; --tagline: 20px; --small: 15.5px;
-    --action: 344px; --watermark: 460px;
+  body { --col-pad: 64px; --wordmark: 42px; --small: 15.5px;
   }
 }
 @media (max-width: 612px) {
-  body {
-    --pad-top: 161px; --col-pad: 26px; --col-max: 390px; --col-gap: 26px;
-    --mark: 88px; --wordmark: 33px; --tagline: 17px; --small: 14.5px;
-    --action: 100%; --watermark: 300px;
+  body { --col-pad: 26px; --wordmark: 33px; --small: 14.5px;
   }
 }
 
@@ -125,13 +126,12 @@ nav {
  * and `--section` is the one step the scale was missing below it. No new
  * colour, no second face.
  *
- * **`--prose` is its own row and not `--tagline`, which it used to be.** The
- * two were one value at 21px, and they are not one question. `--tagline` is
- * the sign-in page's, copied: it sets a single centred line under the lockup
- * and moving it would move the landing page, which is not what was asked
- * for. `--prose` sets nine pages of running text a parent reads on a phone,
- * and 21px was too large for that. Splitting them is what lets this one drop
- * without touching the other. Both still live in this file, once each.
+ * **`--prose` is its own row.** It was once shared with `--tagline`, the
+ * sign-in page's single centred line under the lockup, at 21px for both --
+ * which is one value answering two questions, and 21px was too large for
+ * nine pages of running text on a phone. Splitting them let this one drop
+ * without moving the other. `--tagline` itself is gone now: the homepage it
+ * belonged to has been replaced and no element asks for it.
  *
  * The measure is in `ch`, so the readable line length is a count of
  * characters at whatever size the breakpoint above has chosen -- it cannot
@@ -145,9 +145,10 @@ body { --section: 27px; --prose: 18px; }
 @media (max-width: 1014px) { body { --section: 25px; --prose: 17.5px; } }
 @media (max-width: 612px)  { body { --section: 21px; --prose: 16px; } }
 
-/* The top pad is NOT `--pad-top`. That value drops the landing page's lockup
-   to where a family meets it one click later; a document has a title at the
-   top and wants to start near the top of the screen. */
+/* A document starts near the top of the screen, because it has a title there.
+   The old landing page did the opposite -- it held its lockup down the page,
+   on `--pad-top`, to where a family meets the same lockup one click later --
+   and that variable went out with it. */
 .page {
   min-height: 100%;
   padding: 56px var(--col-pad) calc(64px + env(safe-area-inset-bottom));
@@ -249,4 +250,660 @@ body { --section: 27px; --prose: 18px; }
   margin-top: 2.6em;
   padding-top: 1.4em;
   border-top: 1px solid #e6e1d7;
+}
+
+/* =========================================================================
+ * THE HOMEPAGE.
+ * =========================================================================
+ *
+ * Everything from here down has an element on `/` and nowhere else. The two
+ * documents are untouched by it.
+ *
+ * **Where the numbers came from.** Bradley's approved mockups -- a 1440px
+ * canvas and a 390px one -- were read for layout, spacing and colour, and
+ * rebuilt here as ordinary CSS. The mockups' own wrapper, their Google Fonts
+ * link and their redrawn dog and wordmark were NOT copied; the marks on this
+ * site are the marks that were already on it.
+ *
+ * **Four departures from the mockup, all deliberate, all listed.**
+ *
+ * 1. `700` became `600` everywhere. The mockup set its headings in Bold and
+ *    this site self-hosts Regular and Semibold only. Asking for 700 would
+ *    either fetch a third file or let the browser smear the 600 into a fake
+ *    bold, and Bradley's instruction is that the heading weight is the
+ *    Semibold already in `/fonts`.
+ *
+ * 2. The greens are the site's `#0e6455`, not the mockup's `#3E5E50`. The
+ *    site's green is the product's: it is what `a` has always been here, it
+ *    is `web/src/link.css`'s, and a family meets it again one click later on
+ *    the sign-in page. Two greens a shade apart, one on the homepage and one
+ *    everywhere else, is the drift this stylesheet exists to prevent. This is
+ *    a visible difference from the approved picture and it is Bradley's call
+ *    to reverse.
+ *
+ * 3. The eyebrow's brown is `#8f6231`, darker than either the mockup's
+ *    `#A57C47` or the site's own `#b8783c`. Measured on this ground those two
+ *    read at 3.55:1 and 3.42:1, and this is 16px text, not a graphic -- it
+ *    needs 4.5:1 and gets 5.00:1. The dog and the wordmark keep their own
+ *    warm brown untouched; a logotype is not held to a text ratio.
+ *
+ * 4. The ground stays `#faf8f4` and the ink stays `#17191b`. The mockup's
+ *    `#F8F7F3` and `#1C1B19` differ by two and five parts in 255; matching
+ *    them exactly would move the privacy policy and the terms for a
+ *    difference no eye can find.
+ * ---------------------------------------------------------------------- */
+
+/* The homepage's own rows on the scale. They sit beside the document pages'
+   `--section` / `--prose` rather than replacing anything: the two page types
+   answer different questions and a shared value between them would be a
+   coincidence, not a concept.
+
+   `--art` is the odd one and is explained where it is used. */
+body {
+  /* `--page-pad` is not `--col-pad` and the two are not going to be merged.
+     They are both a side gutter and they answer different questions: a
+     document wants its reading column pulled well in from a phone's edge
+     (26px), and a marketing page wants to give a five-column picture every
+     pixel it can get (24px). They happen to agree at 80px on a wide screen
+     and part company at both breakpoints below it. */
+  --page-pad: 80px;
+  --h1: 68px;
+  --h2-lead: 42px;
+  --h2: 38px;
+  --sub: 22px;
+  --lead: 21px;
+  --body-copy: 20px;
+  --eyebrow: 16px;
+  --note: 16px;
+  --btn: 19px;
+  --nav-link: 17px;
+  --art: min(16px, calc(1.6667vw - 2.6667px));
+  --art-ratio: 2.4;
+  --card-w: 7em;
+  --card-h: 8.5em;
+  --hand: 2em;
+  --hero-mark: 10.7em;
+  --hero-doc: 2.75em;
+  --footer-dog: 190px;
+}
+@media (max-width: 1014px) {
+  body {
+    --page-pad: 48px;
+    --h1: 50px; --h2-lead: 34px; --h2: 30px; --sub: 20px; --lead: 19px;
+    --body-copy: 19px; --eyebrow: 15px; --note: 15px; --btn: 18px;
+    --nav-link: 16px;
+    --art: min(16px, calc(1.6667vw - 1.6px));
+    --footer-dog: 156px;
+  }
+}
+@media (max-width: 612px) {
+  body {
+    --page-pad: 24px;
+    --h1: 40px; --h2-lead: 30px; --h2: 28px; --sub: 18px; --lead: 18px;
+    --body-copy: 18px; --eyebrow: 14px; --note: 15px; --btn: 18px;
+    --nav-link: 16px;
+    /* A different picture, so a different base: the phone mockup's panel is
+       342 wide and its card labels are 14px, which is 4.094% of the width
+       rather than the desktop picture's 1.667%. */
+    --art: calc(4.0936vw - 1.9649px);
+    --art-ratio: 1.14;
+    --card-w: 6em;
+    --card-h: 7.2857em;
+    --hand: 1.7857em;
+    --hero-mark: 7.5em;
+    --hero-doc: 2.143em;
+    --footer-dog: 120px;
+  }
+}
+
+/* The homepage's inks. `--warm` is the mockup's running-text grey and
+   `--faint` its small print; both were measured on this ground before they
+   were written down (9.43:1 and 5.31:1). */
+.home {
+  --warm: #45423d;
+  --faint: #6b675f;
+  --eyebrow-ink: #8f6231;
+  --panel: #efece4;
+  --schools: #eaeee8;
+  --tint: #f4f2ec;
+  --card-line: #e4e0d6;
+  --hair: #eeebe3;
+  --ghost: #ddd8cc;
+  --card-shadow: 0 10px 30px rgba(60, 50, 30, .08);
+}
+
+/* **A widow is a bug on this page.** No heading and no paragraph may leave one
+   word alone on its last line. `balance` evens a heading's lines out and
+   `pretty` pulls a word back off a paragraph's last line; the few places the
+   browser still could not win are held with a non-breaking space in the
+   markup, which is why `and&nbsp;Slides` is spelled that way. Scoped to this
+   page: the documents' line breaking is not what was asked for and moving it
+   would move nine pages of legal text for no reason. */
+.home h1, .home h2 { text-wrap: balance; }
+.home p { text-wrap: pretty; }
+
+.home {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip;
+}
+.home section { padding-left: var(--page-pad); padding-right: var(--page-pad); }
+.home h1, .home h2 { margin: 0; font-weight: 600; }
+.home p { margin: 0; }
+
+/* ------------------------------------------------------------------ header */
+.site-head {
+  padding: 22px var(--page-pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+/* The lockup in the bar: the dog and the wordmark that were already on this
+   site, at the size this bar wants them.
+
+   **Sized through `--mark` and `--wordmark` and nothing else.** Both rules
+   read those two variables, the cap under the dotless i is in `em`, and so
+   re-declaring the variables HERE -- on the element, not on `body` -- moves
+   the whole lockup together and leaves `.doc h1`, which reads the same
+   `--wordmark` at the body level, exactly where it was. No wordmark rule and
+   no cap rule is touched.
+
+   The one consequence worth writing down: the cap's three sizes switch on the
+   VIEWPORT, because they are `sign_in_cap_css()`'s output and that function
+   was keyed to a breakpoint. A 28px wordmark on a wide screen therefore takes
+   the step meant for the 46px one. The step is a 5% difference in the cap's
+   width, which at 28px is half a pixel. Adding a fourth step would be editing
+   a cap rule, and the rule is that those are not edited here. */
+/* The dog. One file, two placements -- the bar and the hero picture -- and a
+   size is asked for by declaring `--mark` where it is wanted. The rule itself
+   is the one that was already here. */
+.mark { display: block; border-radius: 24%; width: var(--mark); height: var(--mark); }
+
+.site-lockup {
+  --mark: 40px;
+  --wordmark: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  padding: 6px 0;
+}
+.site-lockup:hover { text-decoration: none; }
+.site-head nav { gap: 4px 28px; }
+.site-head nav a { font-size: var(--nav-link); }
+
+/* The one filled control on the page, and the only place white type sits on
+   the green. 7.06:1. */
+.btn {
+  display: inline-block;
+  background: #0e6455;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: var(--nav-link);
+}
+.btn:hover { background: #0b4e43; text-decoration: none; }
+nav a.btn { padding: 12px 22px; }
+
+/* -------------------------------------------------------------------- hero */
+.hero {
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* **The picture, and why it is measured in `em`.**
+ *
+ * It is a scatter: five cards, a dog and three hand-written notes at fixed
+ * places on a 960x400 field. Percentages hold the POSITIONS at any width, but
+ * a card's own size and the type inside it are not percentages of anything,
+ * so at 1024px the arrangement would keep its shape while the cards inside it
+ * stayed desktop-sized and collided.
+ *
+ * So the panel carries a font size that tracks its own width, and every size
+ * inside it is in `em`. The panel is `min(960px, 100vw - 2 * --page-pad)`
+ * wide, and one em is 1/60th of that -- 16px at 960, and exactly
+ * proportionally less below it. That is what the `min()` and the subtraction
+ * in `--art` say: the vw term is the panel's width, the px term takes the two
+ * paddings off it, and the 16px cap is the panel hitting its maximum.
+ *
+ * (A container query would say this more directly. It would also fail silently
+ * -- as a dropped declaration and a pile of default-sized elements -- on a
+ * browser that does not have them, and this is a page that has to draw on
+ * whatever a school hands a family.)
+ */
+.hero-art {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: var(--art-ratio);
+  background: var(--panel);
+  border-radius: 24px;
+  overflow: hidden;
+  font-size: var(--art);
+}
+.hero-card {
+  position: absolute;
+  width: var(--card-w);
+  height: var(--card-h);
+  background: #fff;
+  border-radius: .875em;
+  box-shadow: 0 .375em 1.125em rgba(60, 50, 30, .12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .7em;
+}
+.hero-card span { font-size: 1em; font-weight: 600; line-height: 1; }
+.hero-card svg { width: 2.5em; height: auto; display: block; }
+
+.c-math    { left: 14.58%; top: 17.5%; transform: rotate(-6deg); }
+.c-english { left: 34.38%; top: 47.5%; transform: rotate(4deg); }
+.c-science { left: 48.96%; top: 16%;   transform: rotate(-3deg); }
+.c-history { left: 64.58%; top: 49%;   transform: rotate(6deg); }
+.c-spanish { left: 80.21%; top: 24%;   transform: rotate(-5deg); }
+
+/* Fido, holding a document. The dog is `img.mark` -- the same file, the same
+   bytes, as the dog in the bar above and as the faded one in the corner
+   below -- sized through `--mark` exactly as the bar's is. The document is
+   not a mark; it is one of this page's abstract documents, drawn like the
+   five on the cards. */
+.hero-fido { --mark: var(--hero-mark); position: absolute; left: 46.49%; top: 42.79%; }
+/* **Anchored at the top edge of the paper, not at its middle.** Whatever
+   angle it is turned to, the corner in his teeth has to stay in his teeth:
+   `transform-origin: top center` pins the point that is being held and swings
+   the rest of the sheet below it. `left` is the mouth's own centre line --
+   52.5% of the way across the mark, which lands at 55.4% of the panel. */
+.hero-doc {
+  position: absolute;
+  left: 55.4%;
+  top: 73%;
+  width: var(--hero-doc);
+  height: auto;
+  display: block;
+  transform-origin: top center;
+  transform: translateX(-50%) rotate(-14deg);
+}
+
+/* The arrows that tie each note to what it is asking about. Their own
+   viewBox is the panel's 960x400, so they scale with it and need no
+   positioning of their own. The phone picture has none: the notes there are
+   stacked in a clear corner and an arrow would have nowhere to go. */
+.hero-arrows {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.hand {
+  position: absolute;
+  font-family: "Caveat", "Comic Sans MS", cursive;
+  font-weight: 600;
+  font-size: var(--hand);
+  line-height: 1;
+  color: #3a3833;
+  white-space: nowrap;
+}
+.h-due    { left: 5%;     top: 66.5%; transform: rotate(-3deg); }
+.h-test   { left: 63.54%; top: 3.5%;  transform: rotate(2deg); }
+.h-change { left: 72.92%; top: 86.5%; transform: rotate(-2deg); }
+
+.eyebrow {
+  margin-top: 56px;
+  font-size: var(--eyebrow);
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--eyebrow-ink);
+}
+.hero h1 {
+  margin-top: 14px;
+  font-size: var(--h1);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  text-align: center;
+}
+.hero .sub {
+  margin-top: 18px;
+  font-size: var(--sub);
+  line-height: 1.45;
+  color: var(--warm);
+  text-align: center;
+  max-width: 640px;
+}
+.hero .btn {
+  margin-top: 36px;
+  font-size: var(--btn);
+  padding: 16px 32px;
+  border-radius: 12px;
+}
+.hero .note {
+  margin-top: 14px;
+  font-size: var(--note);
+  color: var(--faint);
+}
+
+/* ------------------------------------------------------- the centred turn */
+.turn {
+  padding-top: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  text-align: center;
+}
+.turn h2 { font-size: var(--h2-lead); line-height: 1.15; letter-spacing: -.012em; max-width: 760px; }
+.turn p  { font-size: var(--lead); line-height: 1.55; color: var(--warm); max-width: 760px; }
+
+/* ---------------------------------------------------------------- features
+ *
+ * Two columns above the site's wide breakpoint and one below it, which is the
+ * same 1014px the rest of the scale turns on. The mockup alternates which
+ * side the words sit on; on one column the words always come first, because
+ * a picture with no sentence yet attached to it is a puzzle. `order` does
+ * that without a second DOM order to keep in step. */
+.feature {
+  padding-top: 96px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 80px;
+  align-items: center;
+  /* **`width: 100%` is load-bearing and not decoration.** `.home` is a column
+     flex container, and an `auto` side margin on a flex item switches it from
+     stretching to shrink-to-fit. Without this the single-column feature sat
+     at its own content width -- 908px inside a 940px section at 1100px wide
+     -- and the pictures quietly stopped filling the page they were given.
+     With it, `margin: 0 auto` does the one job it is here for: centring the
+     grid once it is narrower than the section, past 1280. */
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.feature + .feature { padding-top: 120px; }
+.feature.flip .words { order: 1; }
+.feature.flip .shot  { order: 0; }
+.feature .words { display: flex; flex-direction: column; gap: 16px; }
+.feature h2 { font-size: var(--h2); line-height: 1.15; letter-spacing: -.011em; }
+.feature p  { font-size: var(--body-copy); line-height: 1.55; color: var(--warm); }
+/* **Two columns only where the week picture fits in one of them, and that is
+   1200px -- not the 1014 the rest of the scale turns on.** The week is five
+   day columns and a day has to hold the word HOMEWORK; measured across the
+   range, the column falls under 80px below 1200 and the chip hangs out of
+   Monday and over Tuesday. It does not overflow the CARD, which is what
+   makes it easy to miss: the card is fine and the column inside it is not.
+   So the pictures get the whole width from 1200 down, where they are also
+   simply easier to read. */
+@media (max-width: 1200px) {
+  /* One column, and a ceiling on it. Given the whole 1200px a picture of a
+     week becomes a metre of abstract grey bars, and the sentence above it a
+     line no one can track back to its own start. 820px is where both stay
+     the size they are on a laptop. */
+  .feature { grid-template-columns: minmax(0, 1fr); gap: 24px; max-width: 820px; }
+  .feature .words, .feature.flip .words { order: 0; }
+  .feature .shot,  .feature.flip .shot  { order: 1; }
+}
+@media (max-width: 1014px) {
+  .feature { padding-top: 64px; }
+  .feature + .feature { padding-top: 72px; }
+  .turn { padding-top: 64px; }
+}
+
+/* ------------------------------------------------- the product pictures
+ *
+ * Grey bars where a sentence would be, and class names that are school
+ * subjects and nothing else. Nothing here is a screenshot and no child's name
+ * or work appears on this page at any width. */
+.shot {
+  background: #fff;
+  border: 1px solid var(--card-line);
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+}
+.ghost { height: 6px; border-radius: 3px; background: var(--ghost); }
+.chip {
+  align-self: flex-start;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.chip.work { color: #2f6b45; background: #e6f0e8; border: 1px solid #cfe0d4; }
+.chip.exam { color: #a0402a; background: #fbe7e1; border: 1px solid #f2cfc4; }
+.chip.study { color: #44506b; background: #e8ecf4; border: 1px solid #d3dae8; }
+
+/* The week. Five columns at every width -- a week that reflows into a list is
+   no longer the thing the heading above it is naming. */
+.week { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; align-items: start; }
+.week .day { display: flex; flex-direction: column; gap: 4px; background: var(--tint); border-radius: 8px; padding-bottom: 4px; }
+.week .dhead { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.week .dhead b { font-size: 12px; font-weight: 600; line-height: 1; }
+.week .dhead .ghost { height: 5px; width: 60%; }
+.week .dots { display: flex; align-items: flex-end; gap: 3px; height: 11px; }
+.week .dots i { width: 10px; height: 7px; border-radius: 2px; background: #5e8c69; }
+.week .dots i.tall { height: 11px; background: #a0402a; }
+.week .item { background: #fff; padding: 8px; display: flex; flex-direction: column; gap: 5px; border-left: 3px solid var(--k); }
+.week .item b { font-size: 13px; font-weight: 600; line-height: 1; }
+
+/* What is due, and what is coming. */
+.due .label { font-size: 11px; font-weight: 600; letter-spacing: .11em; color: var(--faint); }
+.due .stack { display: flex; flex-direction: column; gap: 6px; background: var(--tint); padding: 6px; border-radius: 8px; }
+.due .item { background: #fff; border-left: 3px solid var(--k); padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.due .item b { font-size: 15px; font-weight: 600; line-height: 1; }
+.due .row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--hair); }
+.due .row .when { width: 72px; flex-shrink: 0; font-size: 13px; font-weight: 600; color: var(--warm); }
+.due .row .bar { width: 3px; height: 20px; flex-shrink: 0; background: var(--k); }
+.due .row .who { width: 70px; flex-shrink: 0; font-size: 14px; font-weight: 600; }
+.due .row .fill { flex-grow: 1; }
+.due > * + * { margin-top: 12px; }
+.due .label + .stack { margin-top: 8px; }
+
+/* What changed. */
+.upd { display: flex; flex-direction: column; gap: 16px; padding: 28px; }
+.upd .title { font-size: 22px; font-weight: 600; line-height: 1.2; }
+.upd .rows { display: flex; flex-direction: column; gap: 10px; }
+.upd .row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--tint); border-radius: 12px; }
+.upd .row .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; background: var(--k); }
+.upd .row .who { width: 76px; flex-shrink: 0; font-size: 15px; font-weight: 600; }
+.upd .row .fill { flex-grow: 1; }
+
+/* Make it theirs. */
+.pers { display: flex; flex-direction: column; gap: 16px; padding: 24px; }
+.pers .me { display: flex; align-items: center; gap: 14px; }
+.pers .me .av { width: 64px; height: 64px; border-radius: 16px; background: #5b55d6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pers .me .lines { display: flex; flex-direction: column; gap: 6px; flex-grow: 1; }
+.pers .me .lines .ghost:first-child { height: 9px; width: 45%; }
+.pers .me .lines .ghost + .ghost { width: 25%; }
+.pers .list { display: flex; flex-direction: column; gap: 6px; background: var(--tint); padding: 6px; border-radius: 8px; }
+.pers .list .row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: #fff; border-left: 3px solid var(--k); }
+.pers .list .row .ic { width: 34px; height: 34px; border-radius: 8px; background: var(--k); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pers .list .row b { font-size: 16px; font-weight: 600; line-height: 1; }
+.pers .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.pers .swatches i { width: 22px; height: 22px; border-radius: 50%; background: var(--k); }
+.pers .swatches i.on { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #17191b; }
+
+/* ---------------------------------------------------------------- schools */
+.schools {
+  margin: 140px var(--page-pad) 0;
+  padding: 64px 80px;
+  background: var(--schools);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+.home .schools { padding-left: 80px; padding-right: 80px; }
+.schools .eyebrow { margin-top: 0; color: #0e6455; }
+.schools h2 { margin-top: 12px; font-size: var(--h2-lead); line-height: 1.2; letter-spacing: -.008em; }
+.schools a { flex-shrink: 0; font-size: var(--btn); }
+@media (max-width: 1014px) {
+  .schools { margin-top: 88px; padding: 36px 28px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .home .schools { padding-left: 28px; padding-right: 28px; }
+  .schools h2 { font-size: var(--h2); }
+  .schools a { font-size: var(--nav-link); padding: 10px 0; display: inline-block; }
+}
+
+/* --------------------------------------------------------- the last words */
+/* `.home .made` and not `.made`: this is a `<p>`, and `.home p { margin: 0 }`
+   one screen up is a class AND an element, which outranks a bare class. Left
+   as `.made` the hundred pixels above this line silently did not happen --
+   which is what it looked like, sitting on the footer's rule. */
+.home .made {
+  margin: 100px var(--page-pad) 0;
+  text-align: center;
+  font-size: var(--nav-link);
+  line-height: 1.5;
+  color: var(--warm);
+}
+@media (max-width: 1014px) { .home .made { margin-top: 64px; text-align: left; } }
+
+/* ------------------------------------------------------------------ footer
+ *
+ * **The faded dog peeks in from the corner, and it is behind nothing.** It is
+ * placed against the footer rather than the page so that it cannot ride up
+ * into the schools panel however long the page gets, it is pinned to the
+ * right edge with room to spare so no part of it is cut off, and the links
+ * beside it are ranged left and reserve their own width. The rule that
+ * matters is the last one: no word on this page ever sits on top of it. */
+.site-footer {
+  position: relative;
+  margin-top: auto;
+  padding: 48px var(--page-pad) calc(48px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--card-line);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 56px;
+  /* **The footer is at least as tall as the dog is drawn.** Without this the
+     dog is taller than the band it sits in and rides up over the line above
+     it -- which it did, at 1024, straight across `Privacy policy`. The
+     factor is the dog's own proportions: the drawing occupies the middle
+     60.8% of its square and starts a quarter of the way down, so 78% of the
+     square is the whole of the dog plus room to spare. */
+  min-height: calc(var(--footer-dog) * .78);
+  /* **And the empty strip under his chin is cut off, not left hanging.** The
+     square is pulled below the footer so the drawing ends on the page's
+     bottom edge; left to overflow, that transparent remainder would add its
+     own 27px of blank page under everything. `clip` on the one axis ends the
+     page where the dog ends. `overflow-x` stays `visible` -- the pairing the
+     spec allows -- so nothing horizontal is silently cropped, and the links
+     sit 48px in from every edge, well clear of the cut. */
+  overflow-y: clip;
+}
+.site-footer .foot-lockup { --wordmark: 20px; position: relative; z-index: 1; }
+.site-footer nav { position: relative; z-index: 1; gap: 4px 32px; }
+.site-footer nav a { font-size: var(--note); }
+/* **Pulled down by exactly the empty strip under the drawing.** The dog is
+   drawn between 25% and 85.8% of its square's height, so a square set flush
+   to the bottom leaves him floating a seventh of his own height above the
+   edge. Dropping the square by that same 14.2% puts his chin ON the bottom
+   of the page and nothing else moves: the nose, and all of him, stays drawn.
+   Horizontally he is pulled fully inside -- the left edge of the drawing is
+   9.2% in from the square's left and the right edge 9.2% in from its right,
+   so the square being inside the page means the dog is. */
+.watermark {
+  position: absolute;
+  right: var(--page-pad);
+  bottom: calc(var(--footer-dog) * -.142);
+  width: var(--footer-dog);
+  height: var(--footer-dog);
+  pointer-events: none;
+  z-index: 0;
+}
+@media (max-width: 1014px) {
+  .site-footer { flex-direction: column; align-items: flex-start; gap: 16px; padding-top: 32px; }
+  .watermark { right: 16px; }
+}
+/* On a phone the four links are given a column narrow enough to wrap into two
+   rows, which is what leaves the corner to the dog. 220px and a 24px
+   separator is what actually fits `Help` and the address on one line
+   together, measured with this site's own 13px touch padding on each link --
+   at 32px they split across three rows and the block grew into the corner. */
+@media (max-width: 612px) {
+  .site-footer nav { max-width: 220px; gap: 0 24px; }
+}
+
+/* ------------------------------------------------------- the phone picture
+ *
+ * Three cards instead of five, stacked notes instead of a scatter, and no
+ * arrows -- the phone mockup's arrangement, not a squeezed copy of the wide
+ * one. The two cards that come off are still in the markup and still read by
+ * anything that ignores CSS; what changes is which of them this width has
+ * room to draw. */
+@media (max-width: 612px) {
+  .hero { padding-top: 16px; }
+  .hero-art { border-radius: 20px; }
+  .hero-card svg { width: 2.143em; }
+  .c-math    { left: 6.43%; top: 18.67%; transform: rotate(-6deg); }
+  .c-science { left: 38%;   top: 11.33%; transform: rotate(-2deg); }
+  .c-english { left: 69%;   top: 20.67%; transform: rotate(5deg); }
+  .c-history, .c-spanish, .hero-arrows { display: none; }
+  .hero-fido { left: 66.2%; top: 52.6%; }
+  .hero-doc  { left: 81.5%; top: 78%; }
+  .h-due     { left: 4.68%; top: 60%;    transform: rotate(-3deg); }
+  .h-test    { left: 4.68%; top: 71.33%; transform: rotate(2deg); }
+  .h-change  { left: 4.68%; top: 82.67%; transform: rotate(-1deg); }
+  /* **The bar loses its button on a phone, which is the approved phone
+     mockup's own bar.** Three things do not fit across 390px: the lockup
+     alone is 174 of it, and the button wraps to two lines and shoulders
+     `Sign in` above itself. Nothing is lost -- the same link, with the same
+     four words and the same mailto, is 300px further down the page where it
+     is the one thing the screen is asking for. */
+  .site-head nav .btn { display: none; }
+  .site-head { padding-top: 14px; padding-bottom: 14px; }
+  .eyebrow { margin-top: 36px; }
+  .hero h1 { margin-top: 10px; line-height: 1.1; }
+  .hero .sub { margin-top: 14px; }
+  .hero .btn { margin-top: 28px; padding: 15px 30px; }
+  .shot { padding: 14px; border-radius: 16px; }
+
+  /* **The week, redrawn for 390px, out of the same markup.** Five columns of
+     57px cannot hold a word like HOMEWORK, and the chips were hanging out of
+     their days and over the next one. The approved phone mockup does not
+     shrink the wide picture, it rearranges it: the five days stay as a strip
+     of headings and three classes are listed underneath at a readable size.
+
+     `display: contents` is what lets one DOM be both. It drops each day's
+     wrapper out of the box tree, so the five headings and the ten rows
+     become direct children of the grid: the headings are pinned to row one
+     and take a column each, and the rows that the phone shows span the full
+     width and stack. `--o` puts those three back in weekday order, which the
+     markup's day-by-day order does not give. */
+  .week { gap: 10px 6px; }
+  .week .day { display: contents; }
+  .week .dhead {
+    grid-row: 1;
+    background: var(--tint);
+    border-radius: 8px;
+    padding: 8px 6px;
+  }
+  .week .dhead .ghost { width: 70%; }
+  .week .item { display: none; }
+  .week .item.keep {
+    display: flex;
+    grid-column: 1 / -1;
+    order: var(--o);
+    padding: 12px;
+    gap: 7px;
+    border: 1px solid var(--hair);
+    border-left: 3px solid var(--k);
+    border-radius: 0 8px 8px 0;
+  }
+  .week .item.keep b { font-size: 15px; }
+  .week .item.keep .chip { font-size: 10px; }
+  .upd { padding: 18px; }
+  .upd .title { font-size: 19px; }
+  .pers { padding: 16px; }
+  .pers .me .av { width: 56px; height: 56px; }
 }

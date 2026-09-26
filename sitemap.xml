@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The four pages this site has. The three below the root are written with
+     their trailing slash because that is the URL that answers 200: a request
+     for /privacy is redirected to /privacy/ by the host, and a sitemap should
+     name the destination rather than the redirect. Both spellings work. The
+     links on this site, and the ones on Google's consent screen, point at
+     /privacy and /terms without the slash and are untouched. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://classifido.com/</loc>
+    <lastmod>2026-09-25</lastmod>
+  </url>
+  <url>
+    <loc>https://classifido.com/privacy/</loc>
+    <lastmod>2026-09-25</lastmod>
+  </url>
+  <url>
+    <loc>https://classifido.com/terms/</loc>
+    <lastmod>2026-09-25</lastmod>
+  </url>
+  <url>
+    <loc>https://classifido.com/help/class-link/</loc>
+    <lastmod>2026-09-25</lastmod>
+  </url>
+</urlset>

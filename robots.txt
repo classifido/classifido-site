@@ -1,0 +1,7 @@
+# Everything on this site is public and may be crawled. There is nothing
+# here to keep out of an index: four pages, no accounts, no family data.
+# The application lives on app.classifido.com and is not this host.
+User-agent: *
+Allow: /
+
+Sitemap: https://classifido.com/sitemap.xml

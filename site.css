@@ -301,9 +301,17 @@ body { --section: 27px; --prose: 18px; }
    were carrying seven or eight lone last words apiece at every width -- from
    before this change, not because of it. `pretty` is the same one-line
    mechanism the homepage uses and it moves no words: it only chooses a
-   different place to break. Headings are left alone because none of them
-   wraps at any width this site has. */
+   different place to break. Measured across both documents at 360, 390, 412,
+   768, 1024 and 1440: seventy-two lone last words without this line, none
+   with it.
+
+   **`balance` on the headings is the same question asked of two lines rather
+   than ten.** An earlier version of this comment claimed no heading on this
+   site ever wraps. Two do, at 360: the terms' `Teachers' content belongs to
+   teachers` and the help page's `How to add a class link`, each leaving its
+   last word alone. */
 .doc p, .doc li { text-wrap: pretty; }
+.doc h1, .doc h2 { text-wrap: balance; }
 .doc h2 + p { margin-top: .6em; }
 .doc strong { font-weight: 600; }
 

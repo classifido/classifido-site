@@ -9,60 +9,6 @@
 <meta property="og:url" content="https://classifido.com/">
 <meta property="og:title" content="ClassiFido">
 <meta property="og:description" content="Your school week in one place.">
-<style>
-/* =========================================================================
- * THE NAME TREATMENT HERE IS A COPY OF THE SIGN-IN PAGE'S OUTPUT.
- * =========================================================================
- *
- * Every value below -- the wordmark rules, the cap's placement and its three
- * em steps -- was taken from what `src/render.py` in the product repo
- * actually rendered, by calling `render.sign_in_page()` and reading the
- * document it returned. Nothing here was redrawn, re-derived, or measured
- * off a screenshot, and the homepage redesign did not touch a character of
- * it: the rules were lifted out of the previous version of this file
- * mechanically and written back.
- *
- * **Why a copy and not a third implementation.** The mortarboard's optical
- * scale is already a deliberate duplication: `web/src/Wordmark.jsx` and
- * `render.py` both hold it because Python cannot import JSX, and
- * `tests/test_wordmark_cap.py` keeps the pair honest with a shared ten-input
- * golden table. A third hand-drawn copy would be a third answer to the same
- * question with no test behind it. This file is a rendered artifact instead:
- * when render.py's changes, re-run it and re-copy. See the README.
- *
- * **The lockup now appears twice on this page, in the bar and in the footer,
- * at two sizes, and that changed nothing here.** `.wordmark` reads
- * `--wordmark` and the cap is in `em`, so a size is asked for by declaring
- * `--wordmark` on the element that wants it -- which `/site.css` does, for
- * those two places, and which leaves `.doc h1` on the privacy and terms pages
- * reading the body-level value it always read.
- *
- * **Everything else this page draws is in `/site.css`**, including `.mark`
- * and `.watermark`: the size and position of an image is layout, and this
- * page now places both of them.
- * ---------------------------------------------------------------------- */
-.wordmark {
-  font-weight: 600;
-  letter-spacing: -.015em;
-  line-height: 1;
-  white-space: nowrap;
-  color: #17191b;
-  font-size: var(--wordmark);
-}
-.i { position: relative; display: inline-block; line-height: 1; margin: 0 .06em; }
-.cap {
-  position: absolute;
-  left: 50%;
-  bottom: .60em;
-  transform: translateX(-50%);
-}
-.fido { color: #b8783c; }
-
-/* ---------------------------------------------- sign_in_cap_css(), verbatim */
-.cap { width: .40em; height: .304em; }
-@media (max-width: 1014px) { .cap { width: .40em; height: .304em; } }
-@media (max-width: 612px) { .cap { width: .42em; height: .319em; } }
-</style>
 <link rel="stylesheet" href="/site.css">
 </head>
 <body>
@@ -91,8 +37,7 @@
 <section class="hero" id="top">
 <div class="hero-art">
 <div class="hero-card c-math"><svg viewBox="0 0 40 50" aria-hidden="true"><use href="#doc-text"></use></svg><span>Math</span></div><div class="hero-card c-english"><svg viewBox="0 0 40 50" aria-hidden="true"><use href="#doc-slide"></use></svg><span>English</span></div><div class="hero-card c-science"><svg viewBox="0 0 40 50" aria-hidden="true"><use href="#doc-text"></use></svg><span>Science</span></div><div class="hero-card c-history"><svg viewBox="0 0 40 50" aria-hidden="true"><use href="#doc-slide"></use></svg><span>History</span></div><div class="hero-card c-spanish"><svg viewBox="0 0 40 50" aria-hidden="true"><use href="#doc-text"></use></svg><span>Spanish</span></div>
-<img class="mark hero-fido" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCI+CjxyZWN0IHg9IjExIiB5PSIzNCIgd2lkdGg9IjIzIiBoZWlnaHQ9IjU0IiByeD0iMTEuNSIgZmlsbD0iI2I4NzgzYyI+PC9yZWN0Pgo8cmVjdCB4PSI4NiIgeT0iMzQiIHdpZHRoPSIyMyIgaGVpZ2h0PSI1NCIgcng9IjExLjUiIGZpbGw9IiNiODc4M2MiPjwvcmVjdD4KPHJlY3QgeD0iMjkuNSIgeT0iMzAiIHdpZHRoPSI2MSIgaGVpZ2h0PSI1MyIgcng9IjI0IiBmaWxsPSIjZGRhMDVjIj48L3JlY3Q+CjxyZWN0IHg9IjQxLjUiIHk9IjY0IiB3aWR0aD0iMzciIGhlaWdodD0iMzkiIHJ4PSIxOC41IiBmaWxsPSIjZjBjODk2Ij48L3JlY3Q+CjxyZWN0IHg9IjUyLjUiIHk9IjgwIiB3aWR0aD0iMTUiIGhlaWdodD0iMTEiIHJ4PSI1LjUiIGZpbGw9IiMxNzE5MWIiPjwvcmVjdD4KPHJlY3QgeD0iMTkiIHk9IjQzIiB3aWR0aD0iMzQiIGhlaWdodD0iMjciIHJ4PSIxMC41IiBmaWxsPSIjZjJlZWU2Ij48L3JlY3Q+CjxyZWN0IHg9IjY3IiB5PSI0MyIgd2lkdGg9IjM0IiBoZWlnaHQ9IjI3IiByeD0iMTAuNSIgZmlsbD0iI2YyZWVlNiI+PC9yZWN0Pgo8Y2lyY2xlIGN4PSIzNiIgY3k9IjU2LjUiIHI9IjYiIGZpbGw9IiMxNzE5MWIiPjwvY2lyY2xlPgo8Y2lyY2xlIGN4PSI4NCIgY3k9IjU2LjUiIHI9IjYiIGZpbGw9IiMxNzE5MWIiPjwvY2lyY2xlPgo8ZyBmaWxsPSJub25lIiBzdHJva2U9IiMxNzE5MWIiIHN0cm9rZS13aWR0aD0iNiI+CjxyZWN0IHg9IjE5IiB5PSI0MyIgd2lkdGg9IjM0IiBoZWlnaHQ9IjI3IiByeD0iMTAuNSI+PC9yZWN0Pgo8cmVjdCB4PSI2NyIgeT0iNDMiIHdpZHRoPSIzNCIgaGVpZ2h0PSIyNyIgcng9IjEwLjUiPjwvcmVjdD4KPC9nPgo8cmVjdCB4PSI1MiIgeT0iNTIuNSIgd2lkdGg9IjE2IiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSIjMTcxOTFiIj48L3JlY3Q+Cjwvc3ZnPgo=" alt="" aria-hidden="true">
-<svg class="hero-doc" viewBox="0 0 40 50" aria-hidden="true"><use href="#doc-text"></use></svg>
+<img class="hero-fido" src="/fido-holding-document.svg" alt="" aria-hidden="true" width="120" height="150">
 <svg class="hero-arrows" viewBox="0 0 960 400" preserveAspectRatio="none" aria-hidden="true">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#3a3833" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></marker></defs>
 <path d="M150 262 C 150 244, 162 232, 178 222" fill="none" stroke="#3a3833" stroke-width="2.2" stroke-linecap="round" marker-end="url(#ah)"></path>

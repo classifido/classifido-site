@@ -10,16 +10,15 @@
  * three copies of one answer is three answers waiting to drift, so they are
  * here once now. Re-copying from render.py means editing THIS file.
  *
- * What is NOT here: the name treatment. `.wordmark` / `.i` / `.cap` /
- * `.fido` and the three cap size rules stay inline in `index.html`, because
- * they are a rendered artifact of one function -- `render.sign_in_page()` --
- * and re-copying them means replacing that block, not editing this file.
+ * The name treatment is now here too, and it is the one thing in this file
+ * that is COPIED rather than written: `.wordmark` / `.i` / `.cap` / `.fido`
+ * and the three cap sizes are what `render.sign_in_page()` rendered, and
+ * re-copying them means replacing that block rather than editing it line by
+ * line. Its own comment says so where it sits.
  *
- * `.mark` and `.watermark` USED to be named in this sentence and are not any
- * more: they are the size and the position of an image, which is layout, and
- * the homepage now places both in two places each. They live below with the
- * rest of the homepage. The image data itself is untouched and there is still
- * exactly one drawing of the dog and one of the faded dog.
+ * `.mark` and `.watermark` are here as well: the size and the position of an
+ * image is layout. The image data is untouched, and the dog and the faded dog
+ * are still drawn once each.
  * ---------------------------------------------------------------------- */
 
 @font-face { font-family: "Source Sans 3"; font-style: normal; font-weight: 400;
@@ -62,6 +61,65 @@ body {
   }
 }
 
+/* **This block moved here out of `index.html` and not one character of it
+ * changed on the way.** The reason it used to sit inline was that one page
+ * had an element for it. Two do now: `404.html` carries the same bar and the
+ * same footer, so the same lockup, and a second copy of these rules would be
+ * a second answer to a question this file exists to answer once.
+ * ---------------------------------------------------------------------- */
+/* =========================================================================
+ * THE NAME TREATMENT HERE IS A COPY OF THE SIGN-IN PAGE'S OUTPUT.
+ * =========================================================================
+ *
+ * Every value below -- the wordmark rules, the cap's placement and its three
+ * em steps -- was taken from what `src/render.py` in the product repo
+ * actually rendered, by calling `render.sign_in_page()` and reading the
+ * document it returned. Nothing here was redrawn, re-derived, or measured
+ * off a screenshot, and the homepage redesign did not touch a character of
+ * it: the rules were lifted out of the previous version of this file
+ * mechanically and written back.
+ *
+ * **Why a copy and not a third implementation.** The mortarboard's optical
+ * scale is already a deliberate duplication: `web/src/Wordmark.jsx` and
+ * `render.py` both hold it because Python cannot import JSX, and
+ * `tests/test_wordmark_cap.py` keeps the pair honest with a shared ten-input
+ * golden table. A third hand-drawn copy would be a third answer to the same
+ * question with no test behind it. This file is a rendered artifact instead:
+ * when render.py's changes, re-run it and re-copy. See the README.
+ *
+ * **The lockup now appears twice on this page, in the bar and in the footer,
+ * at two sizes, and that changed nothing here.** `.wordmark` reads
+ * `--wordmark` and the cap is in `em`, so a size is asked for by declaring
+ * `--wordmark` on the element that wants it -- which `/site.css` does, for
+ * those two places, and which leaves `.doc h1` on the privacy and terms pages
+ * reading the body-level value it always read.
+ *
+ * **Everything else this page draws is in `/site.css`**, including `.mark`
+ * and `.watermark`: the size and position of an image is layout, and this
+ * page now places both of them.
+ * ---------------------------------------------------------------------- */
+.wordmark {
+  font-weight: 600;
+  letter-spacing: -.015em;
+  line-height: 1;
+  white-space: nowrap;
+  color: #17191b;
+  font-size: var(--wordmark);
+}
+.i { position: relative; display: inline-block; line-height: 1; margin: 0 .06em; }
+.cap {
+  position: absolute;
+  left: 50%;
+  bottom: .60em;
+  transform: translateX(-50%);
+}
+.fido { color: #b8783c; }
+
+/* ---------------------------------------------- sign_in_cap_css(), verbatim */
+.cap { width: .40em; height: .304em; }
+@media (max-width: 1014px) { .cap { width: .40em; height: .304em; } }
+@media (max-width: 612px) { .cap { width: .42em; height: .319em; } }
+
 /* ------------------------------------------------------------------ links
  *
  * The face is `web/src/link.css`'s, and the sign-in page's `.secondary`
@@ -100,7 +158,7 @@ a:focus-visible { outline: 2px solid #0e6455; outline-offset: 1px; border-radius
    with 13px of padding -- in a wrapped paragraph that overlaps the lines
    above and below it. In prose a link takes the face above and the size of
    the sentence it sits in, and nothing more. */
-nav a, .contact a {
+nav a, .contact a, .gone .back a {
   display: inline-block;
   font-size: var(--small);
   padding: 13px 4px;
@@ -323,8 +381,8 @@ body {
   --card-h: 8.5em;
   --hand: 2em;
   --hero-mark: 10.7em;
-  --hero-doc: 2.75em;
   --footer-dog: 190px;
+  --gone-dog: 208px;
 }
 @media (max-width: 1014px) {
   body {
@@ -334,6 +392,7 @@ body {
     --nav-link: 16px;
     --art: min(16px, calc(1.6667vw - 1.6px));
     --footer-dog: 156px;
+    --gone-dog: 176px;
   }
 }
 @media (max-width: 612px) {
@@ -351,8 +410,8 @@ body {
     --card-h: 7.2857em;
     --hand: 1.7857em;
     --hero-mark: 7.5em;
-    --hero-doc: 2.143em;
     --footer-dog: 120px;
+    --gone-dog: 148px;
   }
 }
 
@@ -509,26 +568,34 @@ nav a.btn { padding: 12px 22px; }
 .c-history { left: 64.58%; top: 49%;   transform: rotate(6deg); }
 .c-spanish { left: 80.21%; top: 24%;   transform: rotate(-5deg); }
 
-/* Fido, holding a document. The dog is `img.mark` -- the same file, the same
-   bytes, as the dog in the bar above and as the faded one in the corner
-   below -- sized through `--mark` exactly as the bar's is. The document is
-   not a mark; it is one of this page's abstract documents, drawn like the
-   five on the cards. */
-.hero-fido { --mark: var(--hero-mark); position: absolute; left: 46.49%; top: 42.79%; }
-/* **Anchored at the top edge of the paper, not at its middle.** Whatever
-   angle it is turned to, the corner in his teeth has to stay in his teeth:
-   `transform-origin: top center` pins the point that is being held and swings
-   the rest of the sheet below it. `left` is the mouth's own centre line --
-   52.5% of the way across the mark, which lands at 55.4% of the panel. */
-.hero-doc {
+/* **Fido with the document already in his teeth: one drawing, one file.**
+   This used to be `img.mark` with a separate document element placed at the
+   mouth, and the two had to be kept in step by hand at every width. It is
+   now `/fido-holding-document.svg`, which holds both.
+
+   **The dog in that file is not a redraw.** Its thirteen shapes are the
+   existing mark's thirteen shapes, element for element and colour for
+   colour -- checked against the mark's own bytes, not assumed. What the file
+   adds is the paper, turned 12 degrees, with three bites taken out of the
+   edge he is holding, and a viewBox 30 units taller to hang it in.
+
+   **Which is why the size is a width and a ratio, not a square.** The dog
+   still occupies the top 120 units of a 120-wide box, exactly as it did; the
+   extra 30 units are below him. So the width stays `--hero-mark` -- the same
+   number as before, at every breakpoint -- and the height is that times
+   150/120. The dog therefore lands on the same pixels it did before this
+   change, and the paper hangs off the bottom.
+
+   It is an `<img>` and NOT inlined, deliberately: the file carries a `mask`
+   with an id, and two inlined copies on one page would be two elements
+   claiming one id. A file cannot collide with itself. */
+.hero-fido {
   position: absolute;
-  left: 55.4%;
-  top: 73%;
-  width: var(--hero-doc);
-  height: auto;
   display: block;
-  transform-origin: top center;
-  transform: translateX(-50%) rotate(-14deg);
+  left: 46.49%;
+  top: 42.79%;
+  width: var(--hero-mark);
+  height: calc(var(--hero-mark) * 1.25);
 }
 
 /* The arrows that tie each note to what it is asking about. Their own
@@ -732,6 +799,44 @@ nav a.btn { padding: 12px 22px; }
 .pers .swatches i { width: 22px; height: 22px; border-radius: 50%; background: var(--k); }
 .pers .swatches i.on { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #17191b; }
 
+/* ------------------------------------------------------------ not found
+ *
+ * `404.html`, which the host serves for any address it does not have. It is
+ * the homepage's bar and the homepage's footer with one thing between them,
+ * so almost everything it needs is already above; what is here is the middle.
+ *
+ * `flex-grow` on the middle is what holds the footer down: `.home` is a
+ * column and this page is short, so without it the footer would sit under
+ * the heading halfway up an empty screen.
+ *
+ * The dog is the hero's file at a size of its own -- the same drawing, the
+ * same 150/120, sized by its width like the hero's is. */
+.gone {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 64px;
+  padding-bottom: 88px;
+}
+.gone-fido {
+  display: block;
+  width: var(--gone-dog);
+  height: calc(var(--gone-dog) * 1.25);
+}
+.gone h1 {
+  margin-top: 30px;
+  font-size: var(--h2-lead);
+  line-height: 1.15;
+  letter-spacing: -.012em;
+}
+/* 11px, and the link's own 13px of touch padding under it, is the 24px a
+   reader sees -- the same bookkeeping the `nav` and `.contact` rules do. */
+.gone .back { margin-top: 11px; font-size: var(--nav-link); }
+.gone .back a { font-size: var(--nav-link); }
+
 /* ---------------------------------------------------------------- schools */
 .schools {
   margin: 140px var(--page-pad) 0;
@@ -850,7 +955,6 @@ nav a.btn { padding: 12px 22px; }
   .c-english { left: 69%;   top: 20.67%; transform: rotate(5deg); }
   .c-history, .c-spanish, .hero-arrows { display: none; }
   .hero-fido { left: 66.2%; top: 52.6%; }
-  .hero-doc  { left: 81.5%; top: 78%; }
   .h-due     { left: 4.68%; top: 60%;    transform: rotate(-3deg); }
   .h-test    { left: 4.68%; top: 71.33%; transform: rotate(2deg); }
   .h-change  { left: 4.68%; top: 82.67%; transform: rotate(-1deg); }

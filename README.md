@@ -139,9 +139,10 @@ HTTPS is still enforced -- so nothing here had to be re-entered.
 
 ## Analytics — the policy is written, the code is not
 
-`/privacy` carries an `Analytics` section, a provider in the sharing list and
-an effective date of **12 October 2026**. Nothing is built. The page describes
-what the build has to be, so these are requirements and not preferences:
+`/privacy` carries an `Analytics` section and a provider in the sharing list,
+and describes them as **current** -- there is no effective date on the page.
+**Nothing is built.** The policy is therefore ahead of the code, and every
+line of it is a requirement the build has to meet rather than a preference:
 
 - Events go **browser → our server → PostHog**. The browser never talks to
   PostHog.

@@ -295,6 +295,15 @@ body { --section: 27px; --prose: 18px; }
    between paragraphs instead of inside them, which leaves the reading
    texture identical to the landing page's line. */
 .doc p { margin-top: .85em; }
+
+/* **And no paragraph here ends on a word by itself either.** The homepage has
+   asked for this since it was built; these two documents never did, and they
+   were carrying seven or eight lone last words apiece at every width -- from
+   before this change, not because of it. `pretty` is the same one-line
+   mechanism the homepage uses and it moves no words: it only chooses a
+   different place to break. Headings are left alone because none of them
+   wraps at any width this site has. */
+.doc p, .doc li { text-wrap: pretty; }
 .doc h2 + p { margin-top: .6em; }
 .doc strong { font-weight: 600; }
 

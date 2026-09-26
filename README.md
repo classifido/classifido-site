@@ -154,11 +154,26 @@ line of it is a requirement the build has to meet rather than a preference:
   cookies are the ones that keep you signed in.
 - The ID is **derived per month on our server**, and is never sent with a
   name, an email, a school or an IP address.
-- **GeoIP off.** `/privacy` says "No device or GPS location", and the
-  Analytics section's own list of what is recorded is exhaustive.
+- **GeoIP off.** The Analytics section says in so many words that the
+  provider "never receives a name, email, school or location", and the
+  don't-collect list says "No device or GPS location". That commitment does
+  not depend on the enumeration below it and did not move when the
+  enumeration opened up.
+- **Nothing recorded may identify a person, whether or not it is listed.**
+  The sentence that used to close the list -- "The only other things we
+  record are..." -- has been replaced by an open one: "we record only general
+  details that can't identify anyone, such as whether the person is a
+  student, a parent or someone else, their school level and the kind of
+  device." So the test a new property has to pass is the CHARACTER of it, not
+  its absence from a list. The kind of device is named there and may
+  therefore be recorded; anything that narrows to one person may not, list or
+  no list.
 - **Retention one year or less**, which is what "we keep them for no more
   than a year" commits to.
 
-The policy also promises an email before a material change takes effect. The
-product repo has no code that sends one, and its terms-agreement row is
-recorded once per address and never re-checked against a version.
+A material change is announced by **a notice inside ClassiFido**, not by
+email -- both documents were changed to say so, because the product repo has
+no mailer that sends a policy notice and its terms-agreement row is written
+once per address and never re-checked against a version. The notice is
+therefore something that still has to be built, and the terms give it a
+fifteen-day lead.
